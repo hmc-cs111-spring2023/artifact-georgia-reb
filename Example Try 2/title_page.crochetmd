@@ -1,0 +1,17 @@
+type: title_page
+
+{
+    # These types are required.
+    title: "Text goes here", # You can default to just one value needed.
+    author: { # Or you can overwrite the size information.
+        text: "Author",
+        size: 34
+    }, # You can add in additional arguments if you would like.
+
+    # The link is optional.
+    link: {
+        text: "Link is in this text",
+        link: "https://www.google.com/",
+        size: 10
+    }
+}

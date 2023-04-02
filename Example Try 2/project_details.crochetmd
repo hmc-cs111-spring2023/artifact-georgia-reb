@@ -1,0 +1,13 @@
+type: project_details
+
+{
+    text: {
+        title: "Project Size Information",
+        content: "Project size information is written here,
+    },
+    materials: {
+        yarn: "Write yarn information here."
+    }
+
+    abbreviations: search_abbreviations()
+}

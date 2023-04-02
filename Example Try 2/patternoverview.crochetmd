@@ -1,0 +1,6 @@
+# Pages information.
+title_page: "title_page.crochetmd"
+project_details: "details.crochetmd"
+
+# Additional overall rules.
+page_numbers: start_1, "Text next to the number."

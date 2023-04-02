@@ -1,0 +1,52 @@
+page_numbers: start_1, "Words Next to Number"
+
+// Values can go in the chosen order. The user will recieve a warning in
+// certain values are missing.
+title_page {
+    // There will be default sizes for these, but you can overwrite them.
+    title: "Title goes here."
+
+    // Inserting the size is optional, we could just select the default.
+    author: "Author Name", size = 34
+
+    // You can add a link if you want.
+    link: "https://www.google.com/", size = 10
+
+    text: "Any other information can be added by just being written."
+
+    // Here the user is just choosing to insert an image, this is not a required type.
+    image: "insert_image.png", 4
+
+    // This is something that is optional, but it can only appear on the title page.
+    copyright: year = "2023", type = "copyright type"
+}
+
+project_details {
+    // The indentation is what matters, it can go on multiple lines.
+    project_size:
+        text = "We can write a paragraph of text here."
+
+    materials: text = list("Users can write", "In a list if they would like to!")
+
+    // this is a program that will search through the abbreviations used and put them here with out pre-defined definitions.
+    abbreviations: search_abbreviations()
+}
+
+pattern {
+    title: "Part 1"
+    text: "You can add extra text, like what color you are working with."
+
+    // A magic ring with 6 stitches for line 1.
+    1: magic_ring(6)
+
+    // For lines 2 through 4, just stitch.
+    2-4: sc
+
+    // On line 5, repeat (sc, inc) 3 times.
+    5: repeat(3, (sc, inc))
+}
+
+pattern {
+    title: "Part 2"
+    text: "more goes here!"
+}
