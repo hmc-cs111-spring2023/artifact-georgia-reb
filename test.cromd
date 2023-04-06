@@ -1,0 +1,24 @@
+import: "title_page.cromd"
+
+{  
+    type: title_page,
+    content: {
+        title: "Text goes here",
+        author: {
+            text: "Author",
+            size: 34,
+        },
+        link: {
+            text: "Link is in this text",
+            link: "https://www.google.com/",
+            size: 10,
+        },
+    },
+}
+
+global_rules: {
+    page_numbers: {
+        page_start: 1,
+        text: "Text next to the number.",
+    },
+}
