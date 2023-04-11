@@ -1,0 +1,13 @@
+{  
+    type: title_page,
+    content: {
+        author: "Georgia Klein",
+        title: "Text goes here",
+        subtitle: "This is my subtitle",
+        hyperlink: {
+            text: "Link is in this text",
+            link: "https://www.google.com/",
+        },
+        image: "picture.jpeg",
+    },
+}

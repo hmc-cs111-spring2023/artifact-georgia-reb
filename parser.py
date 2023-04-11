@@ -1,8 +1,7 @@
 from typing import List, Union
 from funcparserlib.lexer import make_tokenizer, TokenSpec, Token, LexerError
-from funcparserlib.parser import NoParseError, Parser, tok, many, forward_decl, finished
+from funcparserlib.parser import NoParseError, Parser, tok, many, forward_decl, finished, maybe
 import sys
-from pprint import pformat
 
 # # # # # # # # # # #
 # Tokenizer
@@ -18,9 +17,15 @@ def regex_list(words):
     return regex_words
 
 # Keywords for our language.
-keywords = ["type", "text", "title_page", "project_details", "magic_ring",
-"page_numbers", "content", "title", "author", "size", "global_rules", "import",
-"link", "page_start"]
+page_types = ["title_page", "project_details"]
+global_rules = ["global_rules", "page_numbers", "page_start"]
+section = ["import", "type", "content"]
+
+section_content = ["title", "subtitle", "author", "hyperlink", "link",
+"copyright", "size", "image", "text", "style"]
+functions = ["magic_ring"]
+
+keywords = page_types + global_rules + section + section_content + functions
 
 def tokenize(s: str) -> List[Token]:
     specs = [
@@ -31,7 +36,7 @@ def tokenize(s: str) -> List[Token]:
         TokenSpec("string", r"\".*\""),
         TokenSpec("op", r"[():{},\"]"),
         TokenSpec("keyword", regex_list(keywords)),
-        TokenSpec("comment", r"#(.*)"),
+        TokenSpec("comment", r"#(.*)\n"), # check that this is right!
     ]
     tokenizer = make_tokenizer(specs)
     return [t for t in tokenizer(s) if t.type != "whitespace"]
@@ -75,7 +80,7 @@ def parse(tokens):
 
     # Fix ordering on this!
     # Finished throws an error if there are any unparsed tokens left in the sequence.
-    pattern = (many(section | import_section) + global_rules + finished).named("crochet pattern")
+    pattern = (many(section | import_section) + maybe(global_rules) + -finished).named("crochet pattern")
 
     return pattern.parse(tokens)
 
