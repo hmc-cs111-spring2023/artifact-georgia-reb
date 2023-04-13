@@ -1,12 +1,21 @@
 import: "title_page.cromd"
 
-{  
+{
     type: project_details,
     content: {
-        title: "Welcome to this",
-        hyperlink: {
-            text: "Link is in this text",
-            link: "https://www.google.com/",
+        materials: {
+            yarn: "Two balls of chunky yarn that are the same color.",
+            hook: hook("H",),
+            other: "Polyester fiberfill.",
+            other: "Safety eyes.",
+        },
+        abbreviations: "this!",
+        notes: "My project notes.",
+        size: "This project will be 10cm tall and 5cm wide.",
+        skill-level: "Suitable for intermediate to advanced crocheters.",
+        custom: {
+            header: "Contact Info",
+            text: "gklein@g.hmc.edu",
         },
     },
 }

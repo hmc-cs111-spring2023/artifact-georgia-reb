@@ -22,7 +22,9 @@ global_rules = ["global_rules", "page_numbers", "page_start"]
 section = ["import", "type", "content"]
 
 section_content = ["title", "subtitle", "author", "hyperlink", "link",
-"copyright", "size", "image", "text", "style"]
+"copyright", "size", "image", "text", "style", "space", "materials", "yarn",
+"hook", "other", "abbreviations", "notes", "size", "skill-level", "custom",
+"header"]
 functions = ["magic_ring"]
 
 keywords = page_types + global_rules + section + section_content + functions
@@ -32,11 +34,11 @@ def tokenize(s: str) -> List[Token]:
         TokenSpec("whitespace", r"\s+"),
         TokenSpec("float", r"[+\-]?\d+\.\d*([Ee][+\-]?\d+)*"),
         TokenSpec("int", r"[+\-]?\d+"),
-        TokenSpec("file", r"\"(.*)\.cromd\""),
-        TokenSpec("string", r"\".*\""),
+        TokenSpec("file", r"([^\"]*)\.cromd"),
         TokenSpec("op", r"[():{},\"]"),
         TokenSpec("keyword", regex_list(keywords)),
         TokenSpec("comment", r"#(.*)\n"), # check that this is right!
+        TokenSpec("string", r"[^\"]*"),
     ]
     tokenizer = make_tokenizer(specs)
     return [t for t in tokenizer(s) if t.type != "whitespace"]
@@ -48,7 +50,6 @@ def tokenize(s: str) -> List[Token]:
 def parse(tokens):
     int_num = tok("int") >> int
     float_num = tok("float") >> float
-    string = tok("string")
     keyword = tok("keyword").named("key")
     comment = tok("comment")
 
@@ -56,6 +57,9 @@ def parse(tokens):
     # if the token is equivalent to the argument name.
     def op(name: str) -> Parser[Token, str]:
         return tok("op", name)
+
+    # TODO: this needs to be fixed...
+    string = -op("\"") + (tok("string") | (int_num | float_num) + tok("string")) + -op("\"")
 
     # An argument can be a number (int or float), a string, a keyword or a function call.
     function_call = forward_decl().named("function call")
@@ -68,14 +72,14 @@ def parse(tokens):
     # A section can be many key-value pairs, where a value can be another section
     # or an argument.
     section = forward_decl().named("pattern section")
-    value = (section | argument).named("value")
+    value = (section | function_call | argument).named("value")
     section.define(-op("{") + many(keyword + -op(":") + value + -op(",")) + -op("}"))
 
     # A global rule is a keyword followed by 
     global_rules = (tok("keyword", "global_rules") + -op(":") + section).named("global rule")
 
     # You can import a section from a different file or write the section directly in the file.
-    filename = tok("file").named("filename")
+    filename = (-op("\"") + tok("file") + -op("\"")).named("filename")
     import_section = (tok("keyword", "import") + -op(":") + filename).named("import pattern section")
 
     # Fix ordering on this!
