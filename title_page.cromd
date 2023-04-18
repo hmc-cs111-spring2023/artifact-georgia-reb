@@ -1,14 +1,20 @@
 {  
+    # Now comments are allowed.
     type: title_page,
     content: {
         title: "Text goes here",
         subtitle: "This is my subtitle",
         space: 2,
         author: "Georgia Klein",
-        image: "picture.jpeg",
+        space: 1.5,
+        image: {
+            path: "picture.jpeg",
+            size: 1,
+        },
         hyperlink: {
             text: "Link is in this text",
             link: "https://www.google.com/",
         },
+        text: "I can write in the copyright here.",
     },
 }

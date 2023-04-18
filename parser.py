@@ -1,7 +1,14 @@
+# Crochet Pattern Markdown
+# Parser - parser.py
+# Georgia Klein
+# CS111
+
 from typing import List, Union
 from funcparserlib.lexer import make_tokenizer, TokenSpec, Token, LexerError
 from funcparserlib.parser import NoParseError, Parser, tok, many, forward_decl, finished, maybe
 import sys
+
+# Code is inspired by https://github.com/vlasovskikh/funcparserlib/blob/master/tests/json.py
 
 # # # # # # # # # # #
 # Tokenizer
@@ -17,15 +24,16 @@ def regex_list(words):
     return regex_words
 
 # Keywords for our language.
-page_types = ["title_page", "project_details"]
-global_rules = ["global_rules", "page_numbers", "page_start"]
+page_types = ["title_page", "project_details", "pattern_section", "assembly"]
+global_rules = ["global_rules", "page_numbers", "text_color", "headers_color",
+"page_color", "text_size"]
 section = ["import", "type", "content"]
 
 section_content = ["title", "subtitle", "author", "hyperlink", "link",
-"copyright", "size", "image", "text", "style", "space", "materials", "yarn",
+"copyright", "size", "image", "text", "space", "materials", "yarn",
 "hook", "other", "abbreviations", "notes", "size", "skill-level", "custom",
-"header"]
-functions = ["magic_ring"]
+"heading", "list", "items", "lines", "term", "load", "path"]
+functions = ["magic_ring", "populate_abbreviations"]
 
 keywords = page_types + global_rules + section + section_content + functions
 
@@ -37,11 +45,12 @@ def tokenize(s: str) -> List[Token]:
         TokenSpec("file", r"([^\"]*)\.cromd"),
         TokenSpec("op", r"[():{},\"]"),
         TokenSpec("keyword", regex_list(keywords)),
-        TokenSpec("comment", r"#(.*)\n"), # check that this is right!
+        TokenSpec("comment", r"#(.*)\n"),
         TokenSpec("string", r"[^\"]*"),
     ]
     tokenizer = make_tokenizer(specs)
-    return [t for t in tokenizer(s) if t.type != "whitespace"]
+    # Remove any whitespace and comments.
+    return [t for t in tokenizer(s) if not (t.type in ["whitespace", "comment"])]
 
 # # # # # # # # # # #
 # Parser Combinator
@@ -51,14 +60,12 @@ def parse(tokens):
     int_num = tok("int") >> int
     float_num = tok("float") >> float
     keyword = tok("keyword").named("key")
-    comment = tok("comment")
 
     # Return a parser that parses a Token and returns the string value of the token
     # if the token is equivalent to the argument name.
     def op(name: str) -> Parser[Token, str]:
         return tok("op", name)
 
-    # TODO: this needs to be fixed...
     string = -op("\"") + (tok("string") | (int_num | float_num) + tok("string")) + -op("\"")
 
     # An argument can be a number (int or float), a string, a keyword or a function call.
@@ -87,8 +94,6 @@ def parse(tokens):
     pattern = (many(section | import_section) + maybe(global_rules) + -finished).named("crochet pattern")
 
     return pattern.parse(tokens)
-
-# Code inspired by https://github.com/vlasovskikh/funcparserlib/blob/master/tests/json.py
 
 def loads(s):
     return parse(tokenize(s))

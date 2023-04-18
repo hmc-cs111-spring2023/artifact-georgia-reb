@@ -1,27 +1,82 @@
+# Import the title page.
 import: "title_page.cromd"
 
+# Continue with the rest of the project.
 {
     type: project_details,
     content: {
         materials: {
             yarn: "Two balls of chunky yarn that are the same color.",
-            hook: hook("H",),
+            hook: hook("C",),
             other: "Polyester fiberfill.",
             other: "Safety eyes.",
         },
-        abbreviations: "this!",
+        image: {
+            path: "picture.jpeg",
+            size: 0.3,
+        },
+        abbreviations: {
+            custom: {
+                term: "sc",
+                text: "single crochet stitch",
+            },
+            load: populate_abbreviations("dc", "ch", "inc",),
+        },
         notes: "My project notes.",
         size: "This project will be 10cm tall and 5cm wide.",
         skill-level: "Suitable for intermediate to advanced crocheters.",
         custom: {
-            header: "Contact Info",
+            heading: "Contact Info",
             text: "gklein@g.hmc.edu",
         },
     },
 }
 
-global_rules: {
-    page_numbers: {
-        style: "arabic",
+{
+    type: pattern_section,
+    content: {
+        heading: "Create the Body",
+        list: {
+            text: "Make 6 sc into a magic ring.",
+            text: "Increase in each st around.",
+            items: {
+                lines: 3,
+                text: "sc in each st around.",
+            },
+        },
+        space: 1,
+        list: {
+            items: {
+                lines: 5,
+                text: "Do something simple.",
+            },
+            text: "Now do this.",
+        },
     },
+}
+
+{
+    type: assembly,
+    content: {
+        heading: "Body",
+        list: {
+            text: "Attach the hands to the arms.",
+            text: "Attach the arms to the body.",
+            text: "Attach the legs to the body.",
+        },
+        space: 3,
+        image: {
+            path: "picture.jpeg",
+            size: 0.7,
+        },
+        text: "Caption the image.",
+    },
+}
+
+global_rules: {
+    page_numbers: "arabic",
+    headers_color: "magenta",
+    text_color: "black",
+    page_color: "lightgray",
+    text_size: "large",
 }
