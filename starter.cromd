@@ -2,8 +2,6 @@
 # Crochet Markdown starter file.
 # # # # # # # # # # # # # # # # #
 
-# Import from another file using `import: file_name.cromd`.
-
 # Title page.
 # Required sections: title, author.
 # Optional sections: subtitle, image, hyperlink, space, text.
