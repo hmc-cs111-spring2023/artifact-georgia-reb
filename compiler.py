@@ -53,13 +53,6 @@ class Compiler():
         # If we are producting LaTeX from scratch, we create the new output file.
         self.outputFile = open(outputName + ".tex", "w")      
 
-        # Shape content out of the parser results.
-        # The first value will always be a list of imports and/or sections.
-        # The second section will always be the global rules in the tuple
-        # ('global_rules', [list of rules]).
-        sectionsParsed = self.parsed[0]
-        globalRulesParsed = self.parsed[1][1]
-
         self.outputFile.write("\\documentclass{article}\n")
 
         # Add the required packages.
@@ -69,18 +62,26 @@ class Compiler():
 
         # Make it so there is no indent for each paragraph.
         self.outputFile.write("\setlength\parindent{0pt}\n\n")
-        
-        # Add the global rules.
-        globalRules = GlobalRules(globalRulesParsed, self.outputFile)
-        rules = globalRules.addToLaTeX()
 
-        # Shape out the global rules.
-        if 'text_color' in rules:
-            self.textColor = rules['text_color']
-        if 'heading_color' in rules:
-            self.headingColor = rules['heading_color']
-        if 'text_size' in rules:
-            self.textSize = textSizes[rules['text_size']]
+        # Shape content out of the parser results.
+        # The first value will always be a list of imports and/or sections.
+        # The second section will always be the global rules in the tuple
+        # ('global_rules', [list of rules]).
+        sectionsParsed = self.parsed[0]
+        if self.parsed[1]:
+            globalRulesParsed = self.parsed[1][1]
+        
+            # Add the global rules.
+            globalRules = GlobalRules(globalRulesParsed, self.outputFile)
+            rules = globalRules.addToLaTeX()
+
+            # Shape out the global rules.
+            if 'text_color' in rules:
+                self.textColor = rules['text_color']
+            if 'heading_color' in rules:
+                self.headingColor = rules['heading_color']
+            if 'text_size' in rules:
+                self.textSize = textSizes[rules['text_size']]
 
         # Add the pattern sections.
         sections = Sections(sectionsParsed, self.outputFile, self.textSize,
@@ -94,8 +95,8 @@ class Compiler():
     def producePDF(self, outputName):
         # Run the command in the operating system to convert a LaTeX file to
         # a pdf.
-        self.produceLaTeX(outputName) 
-        os.system("pdflatex " + outputName + ".tex")
+        self.produceLaTeX(outputName)
+        os.system("pdflatex --interaction=batchmode " + outputName + " 2>&1 > /dev/null")
 
 class Sections():
     def __init__(self, sections, outputFile, textSize, textColor, headingColor):
@@ -553,10 +554,19 @@ class GlobalRules():
 
 def main():
     print("Compiling pattern in file: " + sys.argv[1])
-    compiler = Compiler(sys.argv[1])
+    fileName = sys.argv[1]
 
-    # compiler.produceLaTeX("output")
-    compiler.producePDF("output")
+    if fileName[-6:] == ".cromd":
+        compiler = Compiler(fileName)
+
+        # The output pdf name is the same as the input .cromd file name.
+        outputName = fileName[:-6]
+        compiler.producePDF(outputName)
+
+        # Open the produced pdf.
+        os.system("open " + outputName + ".pdf")
+    else:
+        raise Exception("Invalid crochet markdown file, must be a \".cromd\" file.")
 
 if __name__ == "__main__":
     main()
