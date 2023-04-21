@@ -1,0 +1,66 @@
+# # # # # # # # # # # # # # # # #
+# Crochet Markdown starter file.
+# # # # # # # # # # # # # # # # #
+
+# Import from another file using `import: file_name.cromd`.
+
+# Title page.
+# Required sections: title, author.
+# Optional sections: subtitle, image, hyperlink, space, text.
+{  
+    type: title_page,
+    content: {
+        title: "",
+        author: "",
+    },
+}
+
+# Project details section.
+# Required sections: materials, abbreviations.
+# Optional sections: custom, image.
+{
+    type: project_details,
+    content: {
+        materials: {
+            yarn: "",
+            hook: hook("",),
+            other: "",
+        },
+        abbreviations: {
+            load: populate_abbreviations("",),
+        },
+    },
+}
+
+# One pattern section.
+# Required sections: heading, list.
+# Optional sections: image, space, text.
+{
+    type: pattern_section,
+    content: {
+        heading: "",
+        list: {
+            text: "",
+            items: {
+                lines: 2,
+                text: "",
+            },
+        },
+    },
+}
+
+# Assembly section.
+# Required sections: heading, list.
+# Optional sections: image, space, text.
+{
+    type: assembly,
+    content: {
+        heading: "",
+        list: {
+            text: "",
+        },
+    },
+}
+
+# Global rules options include page_numbers, text_colors, headers_colors,
+# text_size, and page_numbers.
