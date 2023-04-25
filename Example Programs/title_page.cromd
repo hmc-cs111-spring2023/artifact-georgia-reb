@@ -1,5 +1,4 @@
 {  
-    # Now comments are allowed.
     type: title_page,
     content: {
         title: "Text goes here",

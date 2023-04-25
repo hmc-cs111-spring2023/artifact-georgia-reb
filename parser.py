@@ -89,7 +89,6 @@ def parse(tokens):
     filename = (-op("\"") + tok("file") + -op("\"")).named("filename")
     import_section = (tok("keyword", "import") + -op(":") + filename).named("import pattern section")
 
-    # Fix ordering on this!
     # Finished throws an error if there are any unparsed tokens left in the sequence.
     pattern = (many(section | import_section) + maybe(global_rules) + -finished).named("crochet pattern")
 
