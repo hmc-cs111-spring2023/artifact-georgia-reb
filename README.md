@@ -1,4 +1,6 @@
-# Crochet Pattern Markdown Language
+# Create Crochet Patterns
+
+![Create Crochet Pattern Logo](https://user-images.githubusercontent.com/53374398/234706978-c65523dc-fe3a-453a-a125-00a44a89aa7c.png)
 
 Welcome to the crochet pattern markdown language git repository.
 
